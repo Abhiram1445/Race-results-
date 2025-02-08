@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Leaderboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        table {
+            width: 50%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: lightgray;
+        }
+        input, button {
+            margin: 10px;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Race Leaderboard</h2>
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" placeholder="Enter name">
+    <label for="time">Finish Time (mm:ss):</label>
+    <input type="text" id="time" placeholder="Enter time (e.g., 02:30)">
+    <button onclick="addResult()">Submit</button>
+
+    <h3>Top 10 Finishers</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Finish Time</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard">
+            <!-- Results will appear here -->
+        </tbody>
+    </table>
+
+    <script>
+        let results = [];
+
+        function addResult() {
+            let username = document.getElementById("username").value.trim();
+            let time = document.getElementById("time").value.trim();
+
+            if (!username || !time.match(/^\d{2}:\d{2}$/)) {
+                alert("Please enter a valid name and time in MM:SS format.");
+                return;
+            }
+
+            results.push({ name: username, time: time });
+
+            // Sort results based on finish time
+            results.sort((a, b) => a.time.localeCompare(b.time));
+
+            // Keep only top 10 results
+            results = results.slice(0, 10);
+
+            updateLeaderboard();
+        }
+
+        function updateLeaderboard() {
+            let tableBody = document.getElementById("leaderboard");
+            tableBody.innerHTML = "";
+
+            results.forEach((result, index) => {
+                let row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${result.name}</td>
+                    <td>${result.time}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+    </script>
+
+</body>
+</html>
